@@ -1,0 +1,2 @@
+# PluralsightStore
+BuildingApplicationsWithReactAndReduxInEs6
