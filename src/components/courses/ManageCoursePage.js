@@ -1,8 +1,7 @@
 import React, { PropTypes } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as courseActions from '../../actions/courseActions';
-import * as authorActions from '../../actions/authorActions';
+import * as courseActions from "../../actions/courseActions";
 import CourseForm from "./CourseForm";
 
 class ManageCoursePage extends React.Component {
@@ -20,7 +19,7 @@ class ManageCoursePage extends React.Component {
     const field = event.target.name;
     let course = Object.assign({}, this.state.course);
     course[field] = event.target.value;
-    return this.setState({course: course});
+    return this.setState({ course: course });
   }
 
   saveCourse(event) {
@@ -30,7 +29,7 @@ class ManageCoursePage extends React.Component {
 
   render() {
     return (
-      <CourseForm 
+      <CourseForm
         allAuthors={this.props.authors}
         onChange={this.updateCourseState}
         onSave={this.saveCourse}
@@ -48,11 +47,18 @@ ManageCoursePage.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  let course = {id: '', watchHref: '', title: '', authorId: '', length: '', category: ''};
+  let course = {
+    id: "",
+    watchHref: "",
+    title: "",
+    authorId: "",
+    length: "",
+    category: ""
+  };
   const authorsFormattedForDropdown = state.authors.map(author => {
     return {
       value: author.id,
-      text: author.firstName + ' ' + author.lastName
+      text: author.firstName + " " + author.lastName
     };
   });
   return {
@@ -63,7 +69,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(courseActions, authorActions, dispatch)
+    actions: bindActionCreators(courseActions, dispatch)
   };
 }
 

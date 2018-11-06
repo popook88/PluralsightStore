@@ -1,5 +1,6 @@
 import * as types from "./actionTypes";
 import courseApi from "../api/mockCourseApi";
+
 export function loadCoursesSuccess(courses) {
   return { type: types.LOAD_COURSES_SUCCESS, courses };
 }
@@ -25,15 +26,17 @@ export function loadCourses() {
   };
 }
 
-export function saveCourse() {
+export function saveCourse(course) {
   return function(dispatch, getState) {
     return courseApi
-    .saveCourse()
-    .then(savedCourse => {
-      dispatch(createCourseSuccess(savedCourse));
-    })
-    .catch(error => {
-      throw error;
-    });
+      .saveCourse(course)
+      .then(savedCourse => {
+        course.id
+          ? dispatch(updateCourseSuccess(savedCourse))
+          : dispatch(createCourseSuccess(savedCourse));
+      })
+      .catch(error => {
+        throw error;
+      });
   };
 }
