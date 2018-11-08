@@ -9,7 +9,7 @@ class LoadingDots extends React.Component {
 
   componentDidMount() {
     this.interval = setInterval(() => {
-      this.setState({ frame: this.state.frame + 1 });
+      this.setState({ frame: this.state.frame + 1 }); //eslint-disable-line react/no-did-mount-set-state
     }, this.props.interval);
   }
 
