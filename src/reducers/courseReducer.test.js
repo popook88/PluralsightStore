@@ -3,6 +3,15 @@ import courseReducer from "./courseReducer";
 import * as actions from "../actions/courseActions";
 
 describe("Course Reducer", () => {
+  it("should overwrite state with loaded courses when passed LOAD_COURSES_SUCCESS", () => {
+    const initialState = [{ title: "A" }, { title: "B" }];
+    const loadedCourses = [{ title: "C" }];
+    const action = actions.loadCoursesSuccess(loadedCourses);
+
+    const newState = courseReducer(initialState, action);
+    expect(newState.length).toEqual(1);
+    expect(newState[0].title).toEqual("C");
+  });
   it("should add course when passed CREATE_COURSE_SUCCESS", () => {
     const initialState = [{ title: "A" }, { title: "B" }];
     const newCourse = { title: "C" };
