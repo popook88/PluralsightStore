@@ -18,6 +18,17 @@ describe("Course Actions", () => {
       expect(action).toEqual(expectedAction);
     });
   });
+  describe("updateCourseSuccess", () => {
+    it("should create a UPDATE_COURSE_SUCCESS action", () => {
+      const course = { id: "clean-code", title: "Clean Code" };
+      const expectedAction = {
+        type: types.UPDATE_COURSE_SUCCESS,
+        updatedCourse: course
+      };
+      const action = courseActions.updateCourseSuccess(course);
+      expect(action).toEqual(expectedAction);
+    });
+  });
 });
 
 const middleware = [thunk];
@@ -48,6 +59,44 @@ describe("Async Actions", () => {
       const actions = store.getActions();
       expect(actions[0].type).toEqual(types.BEGIN_AJAX_CALL);
       expect(actions[1].type).toEqual(types.LOAD_COURSES_SUCCESS);
+      done();
+    });
+  });
+
+  it("should create BEGIN_AJAX_CALL and CREATE_COURSE_SUCCESS when adding a course", done => {
+    const courseToAdd = { title: "Clean Code" };
+    const expectedActions = [
+      { type: types.BEGIN_AJAX_CALL },
+      {
+        type: types.CREATE_COURSE_SUCCESS,
+        body: { courses: [courseToAdd] }
+      }
+    ];
+
+    const store = mockStore({ courses: [] }, expectedActions);
+    store.dispatch(courseActions.saveCourse(courseToAdd)).then(() => {
+      const actions = store.getActions();
+      expect(actions[0].type).toEqual(types.BEGIN_AJAX_CALL);
+      expect(actions[1].type).toEqual(types.CREATE_COURSE_SUCCESS);
+      done();
+    });
+  });
+
+  it("should create BEGIN_AJAX_CALL and UPDATE_COURSE_SUCCESS when adding a course", done => {
+    const courseToAdd = { id: "clean-code", title: "Clean Code" };
+    const expectedActions = [
+      { type: types.BEGIN_AJAX_CALL },
+      {
+        type: types.UPDATE_COURSE_SUCCESS,
+        body: { courses: [courseToAdd] }
+      }
+    ];
+
+    const store = mockStore({ courses: [] }, expectedActions);
+    store.dispatch(courseActions.saveCourse(courseToAdd)).then(() => {
+      const actions = store.getActions();
+      expect(actions[0].type).toEqual(types.BEGIN_AJAX_CALL);
+      expect(actions[1].type).toEqual(types.UPDATE_COURSE_SUCCESS);
       done();
     });
   });
