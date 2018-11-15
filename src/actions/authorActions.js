@@ -6,14 +6,13 @@ export function loadAuthorsSuccess(authors) {
 }
 
 export function loadAuthors() {
-  return function(dispatch) {
+  return async function(dispatch) {
     dispatch(beginAjaxCall());
-    return AuthorApi.getAllAuthors()
-      .then(authors => {
-        dispatch(loadAuthorsSuccess(authors));
-      })
-      .catch(error => {
-        throw error;
-      });
+    try {
+      const authors = await AuthorApi.getAllAuthors();
+      dispatch(loadAuthorsSuccess(authors));
+    } catch (error) {
+      throw error;
+    }
   };
 }
