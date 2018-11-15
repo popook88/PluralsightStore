@@ -29,13 +29,13 @@ class AuthorApi {
         // Simulate server-side validation
         const minAuthorNameLength = 3;
         if (author.firstName.length < minAuthorNameLength) {
-          reject(
+          return reject(
             `First Name must be at least ${minAuthorNameLength} characters.`
           );
         }
 
         if (author.lastName.length < minAuthorNameLength) {
-          reject(
+          return reject(
             `Last Name must be at least ${minAuthorNameLength} characters.`
           );
         }
@@ -59,10 +59,11 @@ class AuthorApi {
   static deleteAuthor(authorId) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const indexOfAuthorToDelete = authors.findIndex(author => {
-          author.id == authorId;
-        });
-        authors.splice(indexOfAuthorToDelete, 1);
+        for (let i = 0; i < authors.length; i++) {
+          if (authors[i].id == authorId) {
+            authors.splice(i, 1);
+          }
+        }
         resolve();
       }, delay);
     });
