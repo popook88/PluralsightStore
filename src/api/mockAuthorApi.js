@@ -1,7 +1,7 @@
 import delay from "./delay";
 import * as data from "./mockApiData.json";
 
-const authors = data.authors;
+let authors = data.authors;
 // This file mocks a web API by working with the hard-coded data below.
 // It uses setTimeout to simulate the delay of an AJAX call.
 // All calls return promises.
@@ -19,7 +19,9 @@ class AuthorApi {
       }, delay);
     });
   }
-
+  static resetToDefaultAuthors() {
+    authors = Object.assign([], data.authors);
+  }
   static saveAuthor(author) {
     author = Object.assign({}, author); // to avoid manipulating object passed in.
     return new Promise((resolve, reject) => {
