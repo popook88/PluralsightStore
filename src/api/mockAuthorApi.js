@@ -1,25 +1,5 @@
 import delay from "./delay";
-// import * as data from "./mockApiData.json";
-
-const data = {
-  authors: [
-    {
-      id: "cory-house",
-      firstName: "Cory",
-      lastName: "House"
-    },
-    {
-      id: "scott-allen",
-      firstName: "Scott",
-      lastName: "Allen"
-    },
-    {
-      id: "dan-wahlin",
-      firstName: "Dan",
-      lastName: "Wahlin"
-    }
-  ]
-};
+import { data } from "./mockApiData.js";
 
 let authors = data.authors;
 // This file mocks a web API by working with the hard-coded data below.

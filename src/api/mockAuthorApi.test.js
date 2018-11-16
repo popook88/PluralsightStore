@@ -1,25 +1,6 @@
 import expect from "expect";
 import AuthorApi from "./mockAuthorApi";
-// import * as data from "./mockApiData.json";
-const data = {
-  authors: [
-    {
-      id: "cory-house",
-      firstName: "Cory",
-      lastName: "House"
-    },
-    {
-      id: "scott-allen",
-      firstName: "Scott",
-      lastName: "Allen"
-    },
-    {
-      id: "dan-wahlin",
-      firstName: "Dan",
-      lastName: "Wahlin"
-    }
-  ]
-};
+import { data } from "./mockApiData.js";
 
 // describe("The Author Api", () => {
 //   let api;
