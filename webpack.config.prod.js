@@ -7,13 +7,12 @@ const GLOBALS = {
 };
 
 export default {
-  debug: true,
+  mode: "production",
   devtool: "source-map",
-  noInfo: false,
   entry: "./src/index",
   target: "web",
   output: {
-    path: __dirname + "/dist",
+    path: path.resolve(path.join(__dirname + "dist")),
     publicPath: "/",
     filename: "bundle.js"
   },
@@ -21,30 +20,32 @@ export default {
     contentBase: "./dist"
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin(GLOBALS),
     new ExtractTextPlugin("styles.css"),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin()
   ],
   module: {
-    loaders: [
+    rules: [
+      {test: /\.js$/, include: path.join(__dirname, 'src'), loader: 'babel-loader'},
       {
-        test: /\.js$/,
-        include: path.join(__dirname, "src"),
-        loaders: ["babel"]
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: require.resolve('style-loader'),
+          use: [
+            {
+              loader: require.resolve('css-loader'),
+              options: {
+                importLoaders: 1,
+                minimize: true,
+                sourceMap: true,
+              }
+            }
+          ]
+        })
       },
-      { test: /(\.css)$/, loader: ExtractTextPlugin.extract("css?sourceMap") },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
-      { test: /\.(woff|woff2)$/, loader: "url?prefix=font/&limit=5000" },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/octet-stream"
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=image/svg+xml"
-      }
+      {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader'},
+      {test: /\.(woff|woff2)$/, options: {prefix: 'font/', limit: 5000}, loader: 'url-loader'},
+      {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, options: {limit: 10000, mimetype: 'application/octet-stream'}, loader: 'url-loader'},
+      {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, options: {limit: 10000, mimetype: 'image/svg+xml' }, loader: 'url-loader'}
     ]
   }
 };

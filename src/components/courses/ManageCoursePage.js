@@ -1,5 +1,7 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import {Redirect} from "react-router-dom";
 import { bindActionCreators } from "redux";
 import * as courseActions from "../../actions/courseActions";
 import CourseForm from "./CourseForm";
@@ -12,17 +14,18 @@ export class ManageCoursePage extends React.Component {
     this.state = {
       course: Object.assign({}, this.props.course),
       errors: {},
-      saving: false
+      saving: false,
+      redirect: false
     };
     this.updateCourseState = this.updateCourseState.bind(this);
     this.saveCourse = this.saveCourse.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.course.id != nextProps.course.id) {
-      // populates form when existing course is loaded directly
-      this.setState({ course: Object.assign({}, nextProps.course) });
+  static getDerivedStateFromProps(props, state) {
+    if(props.course.id != state.course.id) {
+      return props.course;
     }
+    return null;
   }
 
   updateCourseState(event) {
@@ -60,12 +63,15 @@ export class ManageCoursePage extends React.Component {
   }
 
   redirect() {
-    this.setState({ saving: false });
+    this.setState({ saving: false, redirect: true });
     toastr.success("Course saved");
-    this.context.router.push("/courses");
   }
 
   render() {
+    if(this.state.redirect) {
+      return <Redirect to="/courses" />;
+    }
+
     return (
       <CourseForm
         allAuthors={this.props.authors}
@@ -82,12 +88,10 @@ export class ManageCoursePage extends React.Component {
 ManageCoursePage.propTypes = {
   course: PropTypes.object.isRequired,
   authors: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired
 };
 
-ManageCoursePage.contextTypes = {
-  router: PropTypes.object
-};
 
 function getCourseById(courses, id) {
   const course = courses.filter(course => course.id == id);
@@ -96,7 +100,7 @@ function getCourseById(courses, id) {
 }
 
 function mapStateToProps(state, ownProps) {
-  const courseId = ownProps.params.id; // from the path `course/:id`
+  const courseId = ownProps.match.params.id; // from the path `course/:id`
   let course = {
     id: "",
     watchHref: "",

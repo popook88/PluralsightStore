@@ -2,9 +2,8 @@ import webpack from "webpack";
 import path from "path";
 
 export default {
-  debug: true,
+  mode: 'development',
   devtool: "cheap-module-eval-source-map",
-  noInfo: false,
   entry: [
     "eventsource-polyfill", //needed for IE development
     "webpack-hot-middleware/client?reload=true",
@@ -12,7 +11,7 @@ export default {
   ],
   target: "web",
   output: {
-    path: __dirname + "/dist",
+    path: path.resolve(__dirname + "dist"),
     publicPath: "/",
     filename: "bundle.js"
   },
@@ -21,26 +20,25 @@ export default {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin()
   ],
   module: {
-    loaders: [
+    rules: [
+      {test: /\.js$/, include: path.join(__dirname, 'src'), loader: 'babel-loader'},
       {
-        test: /\.js$/,
-        include: path.join(__dirname, "src"),
-        loaders: ["babel"]
+        test: /(\.css)$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {sourcemap: true}
+          }
+        ]
       },
-      { test: /(\.css)$/, loaders: ["style", "css"] },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file" },
-      { test: /\.(woff|woff2)$/, loader: "url?prefix=font/&limit=5000" },
-      {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=application/octet-stream"
-      },
-      {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url?limit=10000&mimetype=image/svg+xml"
-      }
+      {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader'},
+      {test: /\.(woff|woff2)$/, options: {prefix: 'font/', limit: 5000}, loader: 'url-loader'},
+      {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, options: {limit: 10000, mimetype: 'application/octet-stream'}, loader: 'url-loader'},
+      {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, options: {limit: 10000, mimetype: 'image/svg+xml' }, loader: 'url-loader'}
     ]
   }
 };

@@ -17,7 +17,8 @@ describe("Manage Course Page", () => {
       title: "",
       authorId: "",
       length: "",
-      category: ""
+      category: "",
+      match: {}
     }
   };
 
