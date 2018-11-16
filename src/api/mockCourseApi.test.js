@@ -38,31 +38,32 @@ describe("The Course Api", () => {
       });
     });
 
-    it("should update an existing course successfully", async () => {
+    it("should update an existing course successfully", (done) => {
       const courseToUpdate = {
         title: "New Title",
         id: "clean-code"
       };
       api.saveCourse(courseToUpdate).then(result => {});
       api.getAllCourses().then(result => {
-        expect(result).toNotContain(courseToUpdate);
+        expect(result).toContain(courseToUpdate);
         done();
       });
     });
 
-    // it("should reject a firstName that is 2 characters long", async () => {
+    // it("should reject a course title that is 0 characters long", (done) => {
     //   const courseToSave = {
-    //     firstName: "Fi",
-    //     lastName: "Last"
+    //     title: "",
+    //     id: "clean-code"
     //   };
-    //   try {
-    //     await api.saveCourse(courseToSave);
-    //   } catch (err) {
-    //     expect(err).toEqual("First Name must be at least 3 characters.");
-    //     const result = await api.getAllCourses();
-    //     expect(result.length).toEqual(data.courses.length);
-    //   }
-    // });
+    //   api.saveCourse(courseToSave).then(result => {
+    //     expect(true).toBe(false);
+    //     done();
+    //   })
+    //   .catch(err => {
+    //     expect(err).toEqual(5);
+    //     done();
+    //   });
+    });
     // it("should reject a lastName that is 2 characters long", async () => {
     //   const courseToSave = {
     //     firstName: "First",
@@ -76,7 +77,7 @@ describe("The Course Api", () => {
     //     expect(result.length).toEqual(data.courses.length);
     //   }
     // });
-  });
+  // });
 
   //   describe("deleteCourse", () => {
   //     it("should delete an course when an existing id is passed in", async () => {
