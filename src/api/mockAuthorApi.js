@@ -1,5 +1,25 @@
 import delay from "./delay";
-import * as data from "./mockApiData.json";
+// import * as data from "./mockApiData.json";
+
+const data = {
+  authors: [
+    {
+      id: "cory-house",
+      firstName: "Cory",
+      lastName: "House"
+    },
+    {
+      id: "scott-allen",
+      firstName: "Scott",
+      lastName: "Allen"
+    },
+    {
+      id: "dan-wahlin",
+      firstName: "Dan",
+      lastName: "Wahlin"
+    }
+  ]
+};
 
 let authors = data.authors;
 // This file mocks a web API by working with the hard-coded data below.
@@ -9,6 +29,14 @@ let authors = data.authors;
 //This would be performed on the server in a real app. Just stubbing in.
 const generateId = author => {
   return author.firstName.toLowerCase() + "-" + author.lastName.toLowerCase();
+};
+
+const removeAuthorById = authorId => {
+  for (let i = 0; i < authors.length; i++) {
+    if (authors[i].id == authorId) {
+      authors.splice(i, 1);
+    }
+  }
 };
 
 class AuthorApi {
@@ -59,11 +87,7 @@ class AuthorApi {
   static deleteAuthor(authorId) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        for (let i = 0; i < authors.length; i++) {
-          if (authors[i].id == authorId) {
-            authors.splice(i, 1);
-          }
-        }
+        removeAuthorById(authorId);
         resolve();
       }, delay);
     });

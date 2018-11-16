@@ -1,6 +1,54 @@
 import delay from "./delay";
-import * as data from "./mockApiData.json";
-const courses = data.courses;
+// import * as data from "./mockApiData.json";
+const data = {
+  courses: [
+    {
+      id: "react-flux-building-applications",
+      title: "Building Applications in React and Flux",
+      watchHref:
+        "http://www.pluralsight.com/courses/react-flux-building-applications",
+      authorId: "cory-house",
+      length: "5:08",
+      category: "JavaScript"
+    },
+    {
+      id: "clean-code",
+      title: "Clean Code: Writing Code for Humans",
+      watchHref: "http://www.pluralsight.com/courses/writing-clean-code-humans",
+      authorId: "cory-house",
+      length: "3:10",
+      category: "Software Practices"
+    },
+    {
+      id: "architecture",
+      title: "Architecting Applications for the Real World",
+      watchHref:
+        "http://www.pluralsight.com/courses/architecting-applications-dotnet",
+      authorId: "cory-house",
+      length: "2:52",
+      category: "Software Architecture"
+    },
+    {
+      id: "career-reboot-for-developer-mind",
+      title: "Becoming an Outlier: Reprogramming the Developer Mind",
+      watchHref:
+        "http://www.pluralsight.com/courses/career-reboot-for-developer-mind",
+      authorId: "cory-house",
+      length: "2:30",
+      category: "Career"
+    },
+    {
+      id: "web-components-shadow-dom",
+      title: "Web Component Fundamentals",
+      watchHref: "http://www.pluralsight.com/courses/web-components-shadow-dom",
+      authorId: "cory-house",
+      length: "5:10",
+      category: "HTML5"
+    }
+  ]
+};
+
+let courses = data.courses;
 
 // This file mocks a web API by working with the hard-coded data below.
 // It uses setTimeout to simulate the delay of an AJAX call.
@@ -11,7 +59,8 @@ function replaceAll(str, find, replace) {
 
 //This would be performed on the server in a real app. Just stubbing in.
 const generateId = course => {
-  return replaceAll(course.title, " ", "-");
+  let courseId = course.title.toLowerCase();
+  return replaceAll(courseId, " ", "-");
 };
 
 class CourseApi {
@@ -23,6 +72,9 @@ class CourseApi {
     });
   }
 
+  static resetToDefaultCourses() {
+    courses = Object.assign([], data.courses);
+  }
   static saveCourse(course) {
     course = Object.assign({}, course); // to avoid manipulating object passed in.
     return new Promise((resolve, reject) => {
@@ -30,7 +82,9 @@ class CourseApi {
         // Simulate server-side validation
         const minCourseTitleLength = 1;
         if (course.title.length < minCourseTitleLength) {
-          reject(`Title must be at least ${minCourseTitleLength} characters.`);
+          return reject(
+            `Title must be at least ${minCourseTitleLength} characters.`
+          );
         }
 
         if (course.id) {
